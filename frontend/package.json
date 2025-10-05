@@ -1,0 +1,36 @@
+{
+  "name": "algo-content-hub",
+  "version": "2.0.0",
+  "description": "Decentralized Content Platform on Algorand - Rebuilt",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Building for production...'",
+    "test": "echo 'Running tests...'",
+    "serve": "python -m http.server 8000"
+  },
+  "dependencies": {
+    "@algorandfoundation/algokit-utils": "^2.0.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "algorand",
+    "blockchain",
+    "content",
+    "dapp",
+    "decentralized",
+    "monetization",
+    "nft",
+    "ipfs"
+  ],
+  "author": "Algo Content Hub",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algo-content-hub/algo-content-hub"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

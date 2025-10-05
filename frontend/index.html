@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algo Content Hub - Decentralized Content Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script>
+        // Fallback QR code generation if library fails to load
+        window.generateFallbackQR = function(text) {
+            // Replace localhost with actual IP address
+            if (text.includes('localhost')) {
+                text = text.replace('localhost', '192.168.1.79');
+            }
+            return `
+                <div style="padding: 2rem; text-align: center; background: white; border-radius: 12px;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">📱</div>
+                    <h4 style="margin-bottom: 1rem; color: #0d98ba;">Mobile Connection</h4>
+                    <p style="margin-bottom: 1rem; color: #666;">Open this URL on your mobile device:</p>
+                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; word-break: break-all; font-family: monospace; font-size: 0.9rem; color: #0d98ba;">
+                        ${text}
+                    </div>
+                    <div style="background: #e8f4f8; padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: left;">
+                        <h5 style="color: #0d98ba; margin-bottom: 0.5rem;">📱 How to Connect:</h5>
+                        <ol style="margin: 0; padding-left: 1.2rem; font-size: 0.9rem; color: #666;">
+                            <li>Open this URL on your mobile device</li>
+                            <li>Click "Connect Wallet" button</li>
+                            <li>Select Pera Wallet from the options</li>
+                            <li>Approve the connection in Pera Wallet</li>
+                        </ol>
+                    </div>
+                    <button onclick="navigator.clipboard.writeText('${text}').then(() => alert('URL copied!'))" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #0d98ba; color: white; border: none; border-radius: 6px; cursor: pointer; margin-right: 0.5rem;">
+                        Copy URL
+                    </button>
+                    <button onclick="window.open('${text}', '_blank')" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #190f84; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                        Open in New Tab
+                    </button>
+                </div>
+            `;
+        };
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-video"></i>
+                <span>Algo Content Hub</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#marketplace" class="nav-link active" data-section="marketplace">
+                    <i class="fas fa-store"></i>
+                    <span>Marketplace</span>
+                </a>
+                <a href="#upload" class="nav-link" data-section="upload">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload</span>
+                </a>
+                <a href="#dashboard" class="nav-link" data-section="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <div class="wallet-connect" id="wallet-connect">
+                    <button id="connect-wallet-btn" class="btn btn-primary">
+                        <i class="fas fa-wallet"></i>
+                        <span>Connect Wallet</span>
+                    </button>
+                </div>
+                <div class="wallet-info" id="wallet-info" style="display: none;">
+                    <div class="wallet-address">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="wallet-address-text"></span>
+                    </div>
+                    <div class="wallet-balance">
+                        <i class="fas fa-coins"></i>
+                        <span id="wallet-balance-text"></span>
+                    </div>
+                    <button id="disconnect-wallet" class="btn btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="gradient-text">Decentralized Content</span>
+                    <br>Monetization Platform
+                </h1>
+                <p class="hero-description">
+                    Upload, share, and monetize your content on the Algorand blockchain. 
+                    Set your prices, earn from views, and build your audience.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="total-content">0</span>
+                        <span class="stat-label">Content Items</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="total-creators">0</span>
+                        <span class="stat-label">Creators</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="total-revenue">0</span>
+                        <span class="stat-label">ALGO Earned</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-cards">
+                    <div class="card card-1">
+                        <i class="fas fa-video"></i>
+                        <span>Video Content</span>
+                    </div>
+                    <div class="card card-2">
+                        <i class="fas fa-image"></i>
+                        <span>Images</span>
+                    </div>
+                    <div class="card card-3">
+                        <i class="fas fa-link"></i>
+                        <span>URLs</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marketplace Section -->
+        <section id="marketplace" class="section active">
+            <div class="section-header">
+                <h2>Content Marketplace</h2>
+                <div class="marketplace-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Search content...">
+                    </div>
+                    <div class="filter-dropdown">
+                        <select id="category-filter">
+                            <option value="">All Categories</option>
+                            <option value="video">Video</option>
+                            <option value="image">Image</option>
+                            <option value="url">URL</option>
+                        </select>
+                    </div>
+                    <div class="sort-dropdown">
+                        <select id="sort-filter">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="content-grid" id="content-grid">
+                <!-- Content cards will be populated here -->
+            </div>
+            <div class="load-more">
+                <button id="load-more-btn" class="btn btn-outline">
+                    <i class="fas fa-plus"></i>
+                    Load More Content
+                </button>
+            </div>
+        </section>
+
+        <!-- Content Viewer Modal -->
+        <div id="content-viewer-modal" class="modal">
+            <div class="modal-content content-viewer">
+                <div class="modal-header">
+                    <button id="close-viewer" class="close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="content-display">
+                    <div class="content-media" id="content-media">
+                        <!-- Content will be displayed here -->
+                    </div>
+                </div>
+                <div class="content-details">
+                    <h3 id="content-title">Content Title</h3>
+                    <p id="content-description">Content description</p>
+                    <div class="content-meta">
+                        <span class="content-type" id="content-type">Type</span>
+                        <span class="content-price" id="content-price">0 ALGO</span>
+                        <span class="content-owner" id="content-owner">Owner</span>
+                    </div>
+                    <div class="content-actions">
+                        <div id="payment-section" class="payment-section">
+                            <div class="price-options">
+                                <div class="price-option">
+                                    <span class="price-label">View Price</span>
+                                    <span class="price-value" id="view-price">0 ALGO</span>
+                                    <button id="pay-to-view" class="btn btn-primary">
+                                        <i class="fas fa-eye"></i>
+                                        Pay to View
+                                    </button>
+                                </div>
+                                <div class="price-option">
+                                    <span class="price-label">Ownership Price</span>
+                                    <span class="price-value" id="ownership-price">0 ALGO</span>
+                                    <button id="pay-to-own" class="btn btn-success">
+                                        <i class="fas fa-crown"></i>
+                                        Pay to Own
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="access-section" class="access-section" style="display: none;">
+                            <div class="access-granted">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Access Granted</span>
+                            </div>
+                            <div class="session-info">
+                                <span id="session-expiry">Session expires in 24 hours</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <section id="upload" class="section">
+            <div class="section-header">
+                <h2>Upload Content</h2>
+                <p>Share your content with the world and start earning</p>
+            </div>
+            <div class="upload-container">
+                <div class="upload-form-container">
+                    <form id="upload-form" class="upload-form">
+                        <div class="form-section">
+                            <h3>Content Information</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="content-title-input">Title *</label>
+                                    <input type="text" id="content-title-input" required placeholder="Enter content title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="content-type-select">Content Type *</label>
+                                    <select id="content-type-select" required>
+                                        <option value="">Select type</option>
+                                        <option value="video">Video</option>
+                                        <option value="image">Image</option>
+                                        <option value="url">URL</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="content-description-input">Description *</label>
+                                <textarea id="content-description-input" rows="4" required placeholder="Describe your content..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Content File</h3>
+                            <div class="file-upload-area" id="file-upload-area">
+                                <div class="upload-placeholder">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Drag and drop your file here or click to browse</p>
+                                    <input type="file" id="content-file" accept="video/*,image/*" style="display: none;">
+                                </div>
+                                <div class="file-preview" id="file-preview" style="display: none;">
+                                    <div class="preview-content">
+                                        <i class="fas fa-file"></i>
+                                        <span id="file-name"></span>
+                                        <span id="file-size"></span>
+                                    </div>
+                                    <button type="button" id="remove-file" class="btn btn-danger">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group" id="url-input-group" style="display: none;">
+                                <label for="content-url-input">Content URL</label>
+                                <input type="url" id="content-url-input" placeholder="https://example.com">
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Pricing</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="view-price-input">View Price (ALGO) *</label>
+                                    <input type="number" id="view-price-input" min="0" step="0.1" required placeholder="0.1">
+                                    <small>Price for time-limited viewing</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ownership-price-input">Ownership Price (ALGO) *</label>
+                                    <input type="number" id="ownership-price-input" min="0" step="0.1" required placeholder="1.0">
+                                    <small>Price for permanent ownership (NFT)</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" id="preview-upload" class="btn btn-outline">
+                                <i class="fas fa-eye"></i>
+                                Preview
+                            </button>
+                            <button type="submit" id="submit-upload" class="btn btn-primary">
+                                <i class="fas fa-upload"></i>
+                                Upload Content
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section">
+            <div class="section-header">
+                <h2>Your Dashboard</h2>
+                <p>Track your content performance and earnings</p>
+            </div>
+            <div class="dashboard-container">
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Your Content</h3>
+                            <span class="stat-number" id="user-content-count">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Revenue</h3>
+                            <span class="stat-number" id="user-revenue">0 ALGO</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Views</h3>
+                            <span class="stat-number" id="user-views">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Spent</h3>
+                            <span class="stat-number" id="user-payments">0 ALGO</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-content">
+                    <div class="content-section">
+                        <h3>Your Content</h3>
+                        <div class="user-content-list" id="user-content-list">
+                            <!-- User content will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content payment-modal">
+            <div class="modal-header">
+                <h3>Payment Confirmation</h3>
+                <button id="close-payment-modal" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="payment-summary">
+                    <div class="payment-item">
+                        <span>Content Price</span>
+                        <span id="payment-amount">0 ALGO</span>
+                    </div>
+                    <div class="payment-item">
+                        <span>Platform Fee (5%)</span>
+                        <span id="platform-fee">0 ALGO</span>
+                    </div>
+                    <div class="payment-item total">
+                        <span>Total Payment</span>
+                        <span id="total-payment">0 ALGO</span>
+                    </div>
+                </div>
+                <div class="payment-breakdown">
+                    <p>Creator receives: <span id="creator-payment">0 ALGO</span></p>
+                </div>
+                <div class="payment-actions">
+                    <button id="confirm-payment" class="btn btn-primary">
+                        <i class="fas fa-credit-card"></i>
+                        Confirm Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div id="qr-modal" class="modal">
+        <div class="modal-content qr-modal">
+            <div class="modal-header">
+                <h3>Connect with Mobile Wallet</h3>
+                <button id="close-qr-modal" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="qr-container">
+                    <div class="qr-code" id="qr-code">
+                        <!-- QR code will be generated here -->
+                    </div>
+                    <div class="qr-instructions">
+                        <h4>Connect with Mobile Wallet</h4>
+                        <p>Open this URL on your mobile device to connect your Pera Wallet:</p>
+                        <div style="background: #e8f4f8; padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: left;">
+                            <h5 style="color: #0d98ba; margin-bottom: 0.5rem;">📱 How to Connect:</h5>
+                            <ol style="margin: 0; padding-left: 1.2rem; font-size: 0.9rem; color: #666;">
+                                <li>Open this URL on your mobile device</li>
+                                <li>Click "Connect Wallet" button</li>
+                                <li>Select Pera Wallet from the options</li>
+                                <li>Approve the connection in Pera Wallet</li>
+                            </ol>
+                        </div>
+                        <div class="wallet-options">
+                            <div class="wallet-option">
+                                <i class="fas fa-mobile-alt"></i>
+                                <span>Pera Wallet</span>
+                            </div>
+                            <div class="wallet-option">
+                                <i class="fas fa-wallet"></i>
+                                <span>Defly Wallet</span>
+                            </div>
+                            <div class="wallet-option">
+                                <i class="fas fa-desktop"></i>
+                                <span>KMD Wallet</span>
+                            </div>
+                        </div>
+                        <div class="wallet-instructions">
+                            <h5>How to Connect:</h5>
+                            <ol>
+                                <li>Open your Algorand wallet app on your mobile device</li>
+                                <li>Look for "Connect to DApp" or "Scan QR Code" option</li>
+                                <li>Scan the QR code displayed on this page</li>
+                                <li>Approve the connection in your wallet</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="qr-actions">
+                    <button id="refresh-qr" class="btn btn-outline">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh QR Code
+                    </button>
+                    <button id="copy-url" class="btn btn-secondary">
+                        <i class="fas fa-copy"></i>
+                        Copy URL
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p id="loading-text">Processing...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/metamask-wallet.js"></script>
+    <script src="js/bsc-smart-contract.js"></script>
+    <script src="js/content-manager.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

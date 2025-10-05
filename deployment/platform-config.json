@@ -1,0 +1,22 @@
+{
+  "platformName": "Algo Content Hub",
+  "platformVersion": "2.0.0",
+  "platformFee": 5,
+  "platformOwner": "4E7PHGNF7HJDAVKWQMOLH3WGTN2UL3O2OYSRNB26KXLADVCOHRM6HGQPXA",
+  "network": "mainnet",
+  "contractAddress": "TO_BE_DEPLOYED",
+  "ipfsGateway": "https://ipfs.io/ipfs/",
+  "supportedWallets": ["pera", "defly", "kmd"],
+  "features": {
+    "qrCodeConnection": true,
+    "mobileWalletSupport": true,
+    "realTimePayments": true,
+    "nftOwnership": true,
+    "contentVerification": true
+  },
+  "deployment": {
+    "timestamp": "2025-01-04T20:45:00Z",
+    "environment": "production",
+    "platformOwnerWallet": "4E7PHGNF7HJDAVKWQMOLH3WGTN2UL3O2OYSRNB26KXLADVCOHRM6HGQPXA"
+  }
+}

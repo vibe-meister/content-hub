@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMask + BSC Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #0d98ba 0%, #0a7a96 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            color: #190f84;
+            text-align: center;
+        }
+        .test-section {
+            background: rgba(25, 15, 132, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        button {
+            background: #190f84;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0f0a5a;
+        }
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+        }
+        .error {
+            background: rgba(239, 68, 68, 0.2);
+            border-left: 4px solid #ef4444;
+        }
+        .info {
+            background: rgba(59, 130, 246, 0.2);
+            border-left: 4px solid #3b82f6;
+        }
+        .code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🦊 MetaMask + BSC + USDC Test</h1>
+        
+        <div class="test-section">
+            <h3>🔗 Wallet Connection</h3>
+            <button onclick="testConnection()">Connect MetaMask</button>
+            <button onclick="testDisconnect()">Disconnect</button>
+            <div id="connection-status"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🌐 Network Status</h3>
+            <button onclick="testNetwork()">Check BSC Network</button>
+            <div id="network-status"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>💰 Balance Check</h3>
+            <button onclick="testBalance()">Check BNB Balance</button>
+            <button onclick="testUSDCBalance()">Check USDC Balance</button>
+            <div id="balance-status"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>💸 Payment Test</h3>
+            <button onclick="testPayment()">Test 5 USDC Payment</button>
+            <div id="payment-status"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔄 Swap Test</h3>
+            <button onclick="testSwap()">Test BNB → USDC Swap</button>
+            <div id="swap-status"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Platform Info</h3>
+            <div id="platform-info"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+    <script src="js/metamask-wallet.js"></script>
+    <script src="js/bsc-smart-contract.js"></script>
+    <script>
+        async function testConnection() {
+            const status = document.getElementById('connection-status');
+            status.innerHTML = '<div class="info">Connecting...</div>';
+            
+            try {
+                const connected = await metaMaskWallet.connectWallet();
+                if (connected) {
+                    status.innerHTML = `
+                        <div class="success">
+                            <h4>✅ Connected Successfully!</h4>
+                            <p><strong>Address:</strong> <span class="code">${metaMaskWallet.address}</span></p>
+                            <p><strong>Network:</strong> ${metaMaskWallet.network}</p>
+                        </div>
+                    `;
+                } else {
+                    status.innerHTML = '<div class="error">❌ Connection Failed</div>';
+                }
+            } catch (error) {
+                status.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testDisconnect() {
+            metaMaskWallet.disconnectWallet();
+            document.getElementById('connection-status').innerHTML = '<div class="info">Disconnected</div>';
+        }
+        
+        async function testNetwork() {
+            const status = document.getElementById('network-status');
+            try {
+                await metaMaskWallet.switchToBSC();
+                status.innerHTML = `
+                    <div class="success">
+                        <h4>✅ BSC Network Active</h4>
+                        <p><strong>Chain ID:</strong> 56 (BSC)</p>
+                        <p><strong>Network:</strong> BNB Smart Chain</p>
+                    </div>
+                `;
+            } catch (error) {
+                status.innerHTML = `<div class="error">❌ Network Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testBalance() {
+            const status = document.getElementById('balance-status');
+            try {
+                const balance = await metaMaskWallet.getBalance();
+                status.innerHTML = `
+                    <div class="success">
+                        <h4>💰 Balance Information</h4>
+                        <p><strong>BNB:</strong> ${balance.bnb.toFixed(4)} BNB</p>
+                        <p><strong>USDC:</strong> ${balance.usdc.toFixed(2)} USDC</p>
+                    </div>
+                `;
+            } catch (error) {
+                status.innerHTML = `<div class="error">❌ Balance Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testUSDCBalance() {
+            const status = document.getElementById('balance-status');
+            try {
+                const usdcBalance = await metaMaskWallet.getUSDCBalance();
+                status.innerHTML = `
+                    <div class="success">
+                        <h4>💵 USDC Balance</h4>
+                        <p><strong>USDC:</strong> ${usdcBalance.toFixed(2)} USDC</p>
+                        <p><strong>Contract:</strong> <span class="code">0x55d398326f99059fF775485246999027B3197955</span></p>
+                    </div>
+                `;
+            } catch (error) {
+                status.innerHTML = `<div class="error">❌ USDC Balance Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testPayment() {
+            const status = document.getElementById('payment-status');
+            status.innerHTML = '<div class="info">Testing 5 USDC payment...</div>';
+            
+            try {
+                const success = await metaMaskWallet.payWithUSDC(5, '0x1234567890123456789012345678901234567890');
+                if (success) {
+                    status.innerHTML = '<div class="success">✅ Payment successful!</div>';
+                } else {
+                    status.innerHTML = '<div class="error">❌ Payment failed</div>';
+                }
+            } catch (error) {
+                status.innerHTML = `<div class="error">❌ Payment Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testSwap() {
+            const status = document.getElementById('swap-status');
+            status.innerHTML = '<div class="info">Testing BNB → USDC swap...</div>';
+            
+            try {
+                const success = await metaMaskWallet.swapBNBToUSDC(1); // 1 USDC
+                if (success) {
+                    status.innerHTML = '<div class="success">✅ Swap successful!</div>';
+                } else {
+                    status.innerHTML = '<div class="error">❌ Swap failed</div>';
+                }
+            } catch (error) {
+                status.innerHTML = `<div class="error">❌ Swap Error: ${error.message}</div>`;
+            }
+        }
+        
+        // Load platform info
+        window.onload = function() {
+            const platformInfo = document.getElementById('platform-info');
+            platformInfo.innerHTML = `
+                <div class="info">
+                    <h4>🏦 Platform Configuration</h4>
+                    <p><strong>Platform Owner:</strong> <span class="code">0x44edA89fdff579f5FB51E14253B67B557A00d16c</span></p>
+                    <p><strong>Platform Fee:</strong> 5%</p>
+                    <p><strong>Network:</strong> BSC (BNB Smart Chain)</p>
+                    <p><strong>Currency:</strong> USDC</p>
+                </div>
+            `;
+        };
+    </script>
+</body>
+</html>

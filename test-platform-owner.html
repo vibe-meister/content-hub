@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Owner Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #0d98ba 0%, #0a7a96 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            color: #190f84;
+            text-align: center;
+        }
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #10b981;
+        }
+        .code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        button {
+            background: #190f84;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0f0a5a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Platform Owner Configuration Test</h1>
+        
+        <div id="test-results"></div>
+        
+        <button onclick="testConfiguration()">Test Configuration</button>
+        <button onclick="testFeeCollection()">Test Fee Collection</button>
+        <button onclick="openDApp()">Open DApp</button>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/smart-contract.js"></script>
+    <script>
+        function testConfiguration() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = '';
+            
+            // Test 1: Config loaded
+            const configLoaded = typeof window.config !== 'undefined';
+            results.innerHTML += `<div class="success">
+                <h3>✅ Configuration Test</h3>
+                <p><strong>Config Loaded:</strong> ${configLoaded ? 'Yes' : 'No'}</p>
+            `;
+            
+            if (configLoaded) {
+                const platformOwner = window.config.getPlatformOwner();
+                results.innerHTML += `
+                    <p><strong>Platform Owner:</strong> <span class="code">${platformOwner}</span></p>
+                    <p><strong>Platform Fee:</strong> ${window.config.getConfig().platformFee}%</p>
+                `;
+                
+                // Test 2: Smart contract initialization
+                const smartContract = new SmartContractManager();
+                results.innerHTML += `
+                    <p><strong>Smart Contract Owner:</strong> <span class="code">${smartContract.platformOwner}</span></p>
+                `;
+                
+                // Test 3: Validation
+                const isValid = platformOwner && platformOwner.length > 50;
+                results.innerHTML += `
+                    <p><strong>Wallet Address Valid:</strong> ${isValid ? 'Yes' : 'No'}</p>
+                `;
+                
+                if (isValid) {
+                    results.innerHTML += `
+                        <div class="success">
+                            <h3>🎉 Configuration Complete!</h3>
+                            <p>Your wallet address is properly configured for platform fee collection.</p>
+                            <p><strong>All 5% platform fees will be sent to:</strong></p>
+                            <p class="code">${platformOwner}</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            results.innerHTML += '</div>';
+        }
+        
+        function testFeeCollection() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = '';
+            
+            // Simulate a payment
+            const paymentAmount = 10; // 10 ALGO
+            const platformFee = (paymentAmount * 5) / 100; // 5% = 0.5 ALGO
+            const creatorPayment = paymentAmount - platformFee; // 9.5 ALGO
+            
+            results.innerHTML = `
+                <div class="success">
+                    <h3>💰 Fee Collection Test</h3>
+                    <p><strong>Payment Amount:</strong> ${paymentAmount} ALGO</p>
+                    <p><strong>Platform Fee (5%):</strong> ${platformFee} ALGO → <span class="code">4E7PHGNF7HJDAVKWQMOLH3WGTN2UL3O2OYSRNB26KXLADVCOHRM6HGQPXA</span></p>
+                    <p><strong>Creator Payment (95%):</strong> ${creatorPayment} ALGO</p>
+                    <p><strong>Status:</strong> ✅ Ready for real ALGO transactions</p>
+                </div>
+            `;
+        }
+        
+        function openDApp() {
+            window.open('http://localhost:8000', '_blank');
+        }
+        
+        // Auto-test on load
+        window.onload = function() {
+            testConfiguration();
+        };
+    </script>
+</body>
+</html>

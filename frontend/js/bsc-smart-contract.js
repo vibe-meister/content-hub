@@ -74,11 +74,14 @@ class BSCSmartContractManager {
 
     async uploadContent(contentData) {
         try {
+            console.log('BSC Smart Contract: Starting upload with data:', contentData);
+            
             if (!this.isInitialized) {
                 throw new Error('Smart contract not initialized');
             }
 
             // Simulate content upload
+            console.log('BSC Smart Contract: Simulating upload...');
             await new Promise(resolve => setTimeout(resolve, 2000));
 
             const newContent = {

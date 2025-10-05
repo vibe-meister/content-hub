@@ -131,6 +131,16 @@ class MetaMaskWalletManager {
         }
     }
 
+    async getBNBBalance() {
+        try {
+            const balance = await this.provider.getBalance(this.address);
+            return parseFloat(ethers.utils.formatEther(balance));
+        } catch (error) {
+            console.error('Failed to get BNB balance:', error);
+            return 0;
+        }
+    }
+
     async getUSDCBalance() {
         try {
             // USDC balance check using contract call

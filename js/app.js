@@ -383,6 +383,15 @@ class AlgoContentHubApp {
         }
     }
 
+    openFaucet() {
+        // Open BSC TestNet faucet in new tab
+        const faucetUrl = 'https://testnet.bnbchain.org/faucet-smart';
+        window.open(faucetUrl, '_blank');
+        
+        // Show instructions
+        this.showToast('Faucet opened! Enter your wallet address to get test BNB for gas fees.', 'info');
+    }
+
     async loadMoreContent() {
         try {
             // For demo purposes, just reload current content

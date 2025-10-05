@@ -256,7 +256,19 @@ class ContentManager {
 
     async uploadContent(formData) {
         try {
+            console.log('Starting content upload...');
             this.showLoading(true);
+            
+            // Check wallet connection
+            if (!metaMaskWallet.isConnected) {
+                throw new Error('Please connect your wallet first');
+            }
+            
+            // Check if user has BNB for gas fees
+            const bnbBalance = await metaMaskWallet.getBNBBalance();
+            if (bnbBalance < 0.001) {
+                throw new Error('Insufficient BNB for gas fees. Please get test BNB from faucet first.');
+            }
             
             // Extract form data
             const title = document.getElementById('content-title-input').value;
@@ -266,6 +278,8 @@ class ContentManager {
             const ownershipPrice = parseFloat(document.getElementById('ownership-price-input').value);
             const contentFile = document.getElementById('content-file').files[0];
             const contentUrl = document.getElementById('content-url-input').value;
+            
+            console.log('Form data extracted:', { title, description, contentType, viewPrice, ownershipPrice });
             
             // Generate content ID
             const contentId = this.generateContentId();
@@ -295,8 +309,8 @@ class ContentManager {
                 contentId,
                 ipfsHash,
                 contentType,
-                viewPrice: Math.round(viewPrice * 1000000), // Convert to microALGO
-                ownershipPrice: Math.round(ownershipPrice * 1000000), // Convert to microALGO
+                viewPrice: viewPrice, // USDC (18 decimals)
+                ownershipPrice: ownershipPrice, // USDC (18 decimals)
                 metadataHash,
                 title,
                 description

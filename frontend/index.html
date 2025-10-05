@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algo Content Hub - Decentralized Content Platform</title>
+    <title>D.R.I.P. - Decentralized Revenue In Publishing</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,7 @@
             return `
                 <div style="padding: 2rem; text-align: center; background: white; border-radius: 12px;">
                     <div style="font-size: 4rem; margin-bottom: 1rem;">📱</div>
-                    <h4 style="margin-bottom: 1rem; color: #0d98ba;">Mobile Connection</h4>
+                        <h4 style="margin-bottom: 1rem; color: #0d98ba;">D.R.I.P. Mobile Connection</h4>
                     <p style="margin-bottom: 1rem; color: #666;">Open this URL on your mobile device:</p>
                     <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; word-break: break-all; font-family: monospace; font-size: 0.9rem; color: #0d98ba;">
                         ${text}
@@ -53,7 +53,7 @@
         <div class="nav-container">
             <div class="nav-brand">
                 <i class="fas fa-video"></i>
-                <span>Algo Content Hub</span>
+                <span>D.R.I.P.</span>
             </div>
             <div class="nav-menu" id="nav-menu">
                 <a href="#marketplace" class="nav-link active" data-section="marketplace">
@@ -104,11 +104,11 @@
         <section class="hero">
             <div class="hero-content">
                 <h1 class="hero-title">
-                    <span class="gradient-text">Decentralized Content</span>
+                    <span class="gradient-text">Decentralized Revenue In Publishing</span>
                     <br>Monetization Platform
                 </h1>
                 <p class="hero-description">
-                    Upload, share, and monetize your content on the Algorand blockchain. 
+                    Upload, share, and monetize your content on the WEB3 Blockchain. 
                     Set your prices, earn from views, and build your audience.
                 </p>
                 <div class="hero-stats">
@@ -171,16 +171,16 @@
                     </div>
                 </div>
             </div>
-            <div class="content-grid" id="content-grid">
-                <!-- Content cards will be populated here -->
-            </div>
+                <div class="content-grid" id="content-grid">
+                    <!-- Content cards will be populated here -->
+                </div>
             <div class="load-more">
                 <button id="load-more-btn" class="btn btn-outline">
                     <i class="fas fa-plus"></i>
                     Load More Content
                 </button>
-            </div>
-        </section>
+                </div>
+            </section>
 
         <!-- Content Viewer Modal -->
         <div id="content-viewer-modal" class="modal">
@@ -195,10 +195,10 @@
                         <!-- Content will be displayed here -->
                     </div>
                 </div>
-                <div class="content-details">
+                    <div class="content-details">
                     <h3 id="content-title">Content Title</h3>
                     <p id="content-description">Content description</p>
-                    <div class="content-meta">
+                        <div class="content-meta">
                         <span class="content-type" id="content-type">Type</span>
                         <span class="content-price" id="content-price">0 ALGO</span>
                         <span class="content-owner" id="content-owner">Owner</span>
@@ -246,30 +246,30 @@
             </div>
             <div class="upload-container">
                 <div class="upload-form-container">
-                    <form id="upload-form" class="upload-form">
+                <form id="upload-form" class="upload-form">
                         <div class="form-section">
                             <h3>Content Information</h3>
                             <div class="form-row">
-                                <div class="form-group">
+                    <div class="form-group">
                                     <label for="content-title-input">Title *</label>
                                     <input type="text" id="content-title-input" required placeholder="Enter content title">
-                                </div>
-                                <div class="form-group">
+                    </div>
+                    <div class="form-group">
                                     <label for="content-type-select">Content Type *</label>
-                                    <select id="content-type-select" required>
+                        <select id="content-type-select" required>
                                         <option value="">Select type</option>
-                                        <option value="video">Video</option>
-                                        <option value="image">Image</option>
-                                        <option value="url">URL</option>
-                                    </select>
-                                </div>
+                            <option value="video">Video</option>
+                            <option value="image">Image</option>
+                            <option value="url">URL</option>
+                        </select>
+                    </div>
                             </div>
-                            <div class="form-group">
+                    <div class="form-group">
                                 <label for="content-description-input">Description *</label>
                                 <textarea id="content-description-input" rows="4" required placeholder="Describe your content..."></textarea>
                             </div>
-                        </div>
-
+                    </div>
+                    
                         <div class="form-section">
                             <h3>Content File</h3>
                             <div class="file-upload-area" id="file-upload-area">
@@ -293,24 +293,24 @@
                                 <label for="content-url-input">Content URL</label>
                                 <input type="url" id="content-url-input" placeholder="https://example.com">
                             </div>
-                        </div>
-
+                    </div>
+                    
                         <div class="form-section">
                             <h3>Pricing</h3>
                             <div class="form-row">
-                                <div class="form-group">
+                    <div class="form-group">
                                     <label for="view-price-input">View Price (ALGO) *</label>
                                     <input type="number" id="view-price-input" min="0" step="0.1" required placeholder="0.1">
                                     <small>Price for time-limited viewing</small>
-                                </div>
-                                <div class="form-group">
+                    </div>
+                    <div class="form-group">
                                     <label for="ownership-price-input">Ownership Price (ALGO) *</label>
                                     <input type="number" id="ownership-price-input" min="0" step="0.1" required placeholder="1.0">
                                     <small>Price for permanent ownership (NFT)</small>
                                 </div>
                             </div>
-                        </div>
-
+                    </div>
+                    
                         <div class="form-actions">
                             <button type="button" id="preview-upload" class="btn btn-outline">
                                 <i class="fas fa-eye"></i>
@@ -321,10 +321,10 @@
                                 Upload Content
                             </button>
                         </div>
-                    </form>
+                </form>
                 </div>
             </div>
-        </section>
+            </section>
 
         <!-- Dashboard Section -->
         <section id="dashboard" class="section">
@@ -339,7 +339,7 @@
                             <i class="fas fa-video"></i>
                         </div>
                         <div class="stat-content">
-                            <h3>Your Content</h3>
+                        <h3>Your Content</h3>
                             <span class="stat-number" id="user-content-count">0</span>
                         </div>
                     </div>
@@ -348,7 +348,7 @@
                             <i class="fas fa-chart-line"></i>
                         </div>
                         <div class="stat-content">
-                            <h3>Total Revenue</h3>
+                        <h3>Total Revenue</h3>
                             <span class="stat-number" id="user-revenue">0 ALGO</span>
                         </div>
                     </div>
@@ -371,17 +371,17 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="dashboard-content">
                     <div class="content-section">
-                        <h3>Your Content</h3>
+                    <h3>Your Content</h3>
                         <div class="user-content-list" id="user-content-list">
                             <!-- User content will be populated here -->
                         </div>
                     </div>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
     </main>
 
     <!-- Payment Modal -->
@@ -489,7 +489,7 @@
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="loading-overlay">
         <div class="loading-spinner">
-            <div class="spinner"></div>
+        <div class="spinner"></div>
             <p id="loading-text">Processing...</p>
         </div>
     </div>

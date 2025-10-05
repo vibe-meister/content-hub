@@ -32,12 +32,12 @@ class AlgoContentHubApp {
 
     async initializeSmartContract() {
         try {
-            // Initialize BSC smart contract
-            const contractAddress = 'BSC_CONTRACT_ADDRESS';
+            // Initialize BSC smart contract with mock data for demo
+            const contractAddress = 'MOCK_CONTRACT_ADDRESS';
             const contractABI = {};
             
             await bscSmartContract.initialize(contractAddress, contractABI);
-            console.log('BSC Smart contract initialized');
+            console.log('BSC Smart contract initialized with mock data');
             console.log('Platform owner configured: 0x44edA89fdff579f5FB51E14253B67B557A00d16c');
         } catch (error) {
             console.error('BSC Smart contract initialization failed:', error);

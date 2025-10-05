@@ -120,12 +120,12 @@ class ContentManager {
 
     async checkUserAccess(contentId) {
         try {
-            if (!walletManager.isWalletConnected()) {
+            if (!metaMaskWallet.isConnected) {
                 this.showPaymentSection();
                 return;
             }
             
-            const hasAccess = await smartContractManager.verifyViewAccess(contentId, walletManager.getAddress());
+            const hasAccess = await bscSmartContract.verifyViewAccess(contentId, metaMaskWallet.address);
             
             if (hasAccess) {
                 this.showAccessSection();
@@ -154,7 +154,7 @@ class ContentManager {
 
     async payToView() {
         try {
-            if (!walletManager.isWalletConnected()) {
+            if (!metaMaskWallet.isConnected) {
                 this.showToast('Please connect your wallet first', 'warning');
                 return;
             }
@@ -173,7 +173,7 @@ class ContentManager {
 
     async payToOwn() {
         try {
-            if (!walletManager.isWalletConnected()) {
+            if (!metaMaskWallet.isConnected) {
                 this.showToast('Please connect your wallet first', 'warning');
                 return;
             }
@@ -223,9 +223,9 @@ class ContentManager {
             const content = this.currentContent;
             
             if (type === 'view') {
-                await smartContractManager.payToView(content.id, amount);
+                await bscSmartContract.payToView(content.id, amount);
             } else if (type === 'own') {
-                await smartContractManager.payToOwn(content.id, amount);
+                await bscSmartContract.payToOwn(content.id, amount);
             }
             
             // Close modal
@@ -283,7 +283,7 @@ class ContentManager {
                 title,
                 description,
                 contentType,
-                creator: walletManager.getAddress(),
+                creator: metaMaskWallet.address,
                 timestamp: Date.now()
             };
             
@@ -302,7 +302,7 @@ class ContentManager {
                 description
             };
             
-            await smartContractManager.uploadContent(uploadData);
+            await bscSmartContract.uploadContent(uploadData);
             
             // Show success message
             this.showToast('Content uploaded successfully!', 'success');
@@ -362,7 +362,7 @@ class ContentManager {
     async loadMarketplaceContent() {
         try {
             // Load content from smart contract
-            const contentList = await smartContractManager.getContentList();
+            const contentList = await bscSmartContract.getContentList();
             this.contentList = contentList;
             
             // Display content in marketplace
@@ -440,7 +440,7 @@ class ContentManager {
             this.categoryFilter = category;
             this.sortBy = sortBy;
             
-            const results = await smartContractManager.searchContent(query, category, sortBy);
+            const results = await bscSmartContract.searchContent(query, category, sortBy);
             this.displayContentGrid(results);
             
         } catch (error) {

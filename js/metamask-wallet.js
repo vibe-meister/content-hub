@@ -8,21 +8,24 @@ class MetaMaskWalletManager {
         this.network = null;
         this.provider = null;
         
-        // BSC Configuration
+        // BSC TestNet Configuration
         this.bscConfig = {
-            chainId: '0x38', // 56 in hex
-            chainName: 'BNB Smart Chain',
+            chainId: '0x61', // 97 in hex (BSC TestNet)
+            chainName: 'BSC TestNet',
             nativeCurrency: {
-                name: 'BNB',
-                symbol: 'BNB',
+                name: 'tBNB',
+                symbol: 'tBNB',
                 decimals: 18
             },
-            rpcUrls: ['https://bsc-dataseed.binance.org/'],
-            blockExplorerUrls: ['https://bscscan.com/']
+            rpcUrls: [
+                'https://data-seed-prebsc-1-s1.binance.org:8545/',
+                'https://data-seed-prebsc-2-s1.binance.org:8545/'
+            ],
+            blockExplorerUrls: ['https://testnet.bscscan.com/']
         };
         
-        // USDC Contract on BSC
-        this.usdcContract = '0x55d398326f99059fF775485246999027B3197955';
+        // USDC Contract on BSC TestNet
+        this.usdcContract = '0x55d398326f99059fF775485246999027B3197955'; // TestNet USDC
         this.usdcDecimals = 18;
         
         // Platform owner wallet

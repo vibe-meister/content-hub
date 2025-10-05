@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.R.I.P. - Cheapest Deployment Options</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="cheap-deployment-header">
+            <h1>💰 Cheapest D.R.I.P. Deployment</h1>
+            <p>100% FREE options for your decentralized content platform</p>
+        </div>
+
+        <div class="deployment-options">
+            <div class="option-card free">
+                <div class="option-header">
+                    <h3>🆓 Option 1: BSC TestNet (Current)</h3>
+                    <span class="cost">$0/month</span>
+                </div>
+                <div class="option-details">
+                    <ul>
+                        <li>✅ Frontend: GitHub Pages (Free)</li>
+                        <li>✅ Smart Contract: BSC TestNet (Free gas)</li>
+                        <li>✅ Storage: IPFS (Free)</li>
+                        <li>✅ Database: JSON files (Free)</li>
+                    </ul>
+                    <div class="option-actions">
+                        <button class="btn btn-primary" onclick="useCurrentSetup()">
+                            Use Current Setup
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="option-card cheaper">
+                <div class="option-header">
+                    <h3>💸 Option 2: Polygon Mumbai (Cheaper)</h3>
+                    <span class="cost">$0.001/transaction</span>
+                </div>
+                <div class="option-details">
+                    <ul>
+                        <li>✅ Frontend: GitHub Pages (Free)</li>
+                        <li>✅ Smart Contract: Polygon Mumbai (Ultra cheap gas)</li>
+                        <li>✅ Storage: IPFS (Free)</li>
+                        <li>✅ Database: JSON files (Free)</li>
+                        <li>🔥 Gas fees: ~$0.001 per transaction</li>
+                    </ul>
+                    <div class="option-actions">
+                        <button class="btn btn-primary" onclick="switchToPolygon()">
+                            Switch to Polygon
+                        </button>
+                        <a href="https://faucet.polygon.technology/" target="_blank" class="btn btn-outline">
+                            Get Test MATIC
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="option-card cheapest">
+                <div class="option-header">
+                    <h3>🚀 Option 3: Arbitrum Goerli (Cheapest)</h3>
+                    <span class="cost">$0.0001/transaction</span>
+                </div>
+                <div class="option-details">
+                    <ul>
+                        <li>✅ Frontend: GitHub Pages (Free)</li>
+                        <li>✅ Smart Contract: Arbitrum Goerli (Ultra cheap gas)</li>
+                        <li>✅ Storage: IPFS (Free)</li>
+                        <li>✅ Database: JSON files (Free)</li>
+                        <li>🔥 Gas fees: ~$0.0001 per transaction</li>
+                    </ul>
+                    <div class="option-actions">
+                        <button class="btn btn-primary" onclick="switchToArbitrum()">
+                            Switch to Arbitrum
+                        </button>
+                        <a href="https://faucet.quicknode.com/arbitrum/goerli" target="_blank" class="btn btn-outline">
+                            Get Test ETH
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="option-card local">
+                <div class="option-header">
+                    <h3>💻 Option 4: Local Development (Free)</h3>
+                    <span class="cost">$0</span>
+                </div>
+                <div class="option-details">
+                    <ul>
+                        <li>✅ Frontend: Local server (Free)</li>
+                        <li>✅ Smart Contract: Hardhat local network (Free)</li>
+                        <li>✅ Storage: Local files (Free)</li>
+                        <li>✅ Database: JSON files (Free)</li>
+                        <li>🔥 Gas fees: $0 (unlimited)</li>
+                    </ul>
+                    <div class="option-actions">
+                        <button class="btn btn-primary" onclick="setupLocal()">
+                            Setup Local
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cost-comparison">
+            <h3>💰 Cost Comparison</h3>
+            <div class="comparison-table">
+                <div class="comparison-row header">
+                    <div>Option</div>
+                    <div>Gas Cost</div>
+                    <div>Monthly Cost</div>
+                    <div>Setup Time</div>
+                </div>
+                <div class="comparison-row">
+                    <div>BSC TestNet</div>
+                    <div>$0</div>
+                    <div>$0</div>
+                    <div>5 minutes</div>
+                </div>
+                <div class="comparison-row">
+                    <div>Polygon Mumbai</div>
+                    <div>$0.001</div>
+                    <div>$0</div>
+                    <div>10 minutes</div>
+                </div>
+                <div class="comparison-row">
+                    <div>Arbitrum Goerli</div>
+                    <div>$0.0001</div>
+                    <div>$0</div>
+                    <div>15 minutes</div>
+                </div>
+                <div class="comparison-row">
+                    <div>Local Development</div>
+                    <div>$0</div>
+                    <div>$0</div>
+                    <div>30 minutes</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recommendation">
+            <h3>🎯 Recommendation</h3>
+            <div class="recommendation-card">
+                <h4>Start with BSC TestNet (Current Setup)</h4>
+                <p>✅ Already configured</p>
+                <p>✅ Free gas with faucet</p>
+                <p>✅ Easy to use</p>
+                <p>✅ Ready to test</p>
+                <button class="btn btn-primary" onclick="goToMainApp()">
+                    Use Current Setup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function useCurrentSetup() {
+            window.location.href = 'index.html';
+        }
+
+        function switchToPolygon() {
+            alert('Polygon Mumbai configuration will be added. For now, use BSC TestNet.');
+        }
+
+        function switchToArbitrum() {
+            alert('Arbitrum Goerli configuration will be added. For now, use BSC TestNet.');
+        }
+
+        function setupLocal() {
+            alert('Local development setup guide will be added.');
+        }
+
+        function goToMainApp() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
